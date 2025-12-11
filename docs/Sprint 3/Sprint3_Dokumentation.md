@@ -73,14 +73,14 @@ Die UML-Diagramme für Sprint 3 liegen im Ordner `docs/Sprint 3/UML-Diagramme/` 
 - macht sichtbar, dass die grundlegende Architektur aus Sprint 1 / 2 beibehalten wurde
 
 **Kommunikationsdiagramm – Fehlbedienung**  
-![Kommunikationsdiagramm](./UML-Diagramme/Kommunikationsdiagramm.png)
+![Kommunikationsdiagramm](./UML-Diagramme/Kommunikationsdiagramm_Sprint3.png)
 
 - stellt die Interaktion bei wiederholter Fehlbedienung dar  
   (z. B. Benutzer versucht mehrfach, eine gesperrte Zone zu bedienen)  
 - zeigt den Weg von der Eingabe (`HmiInput`) über den `CooktopController` hin zu `HmiOutput.showError(...)` und `showWarning(...)`
 
 **Sequenzdiagramm – Use Case „Wiederholte Fehlbedienung“**  
-![Sequenzdiagramm](./UML-Diagramme/Sequenzdiagramm.png)
+![Sequenzdiagramm](./UML-Diagramme/Sequenzdiagramm_Sprint3.png)
 
 - beschreibt den Ablauf mehrerer ungültiger Eingaben hintereinander  
 - zeigt, wie der Fehlbedienungszähler im `CooktopController` erhöht wird  
