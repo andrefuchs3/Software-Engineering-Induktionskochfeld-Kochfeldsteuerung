@@ -1,0 +1,22 @@
+@startuml
+left to right direction
+
+object User
+object HmiInput
+object CooktopController
+object SafetyManager
+object MisuseDetector
+object HmiOutput
+
+User -> HmiInput : 1: increasePower(zone)
+HmiInput -> CooktopController : 2: increasePower(zone)
+CooktopController -> SafetyManager : 3: isLocked()
+SafetyManager --> CooktopController : 4: true
+
+CooktopController -> HmiOutput : 5: showError("Bedienung gesperrt")
+CooktopController -> HmiOutput : 6: showLock(true)
+
+CooktopController -> MisuseDetector : 7: registerInvalidOperation(reason, out)
+MisuseDetector -> HmiOutput : 8: showWarning("Fehlbedienung erkannt")
+
+@enduml
