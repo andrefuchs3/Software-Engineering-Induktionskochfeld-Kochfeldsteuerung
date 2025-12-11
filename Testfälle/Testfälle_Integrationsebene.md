@@ -130,3 +130,47 @@
 | **Nachbedingung**  | Für `FRONT_LEFT` existiert kein aktiver Timer mehr; die Zone bleibt weiterhin aktiv, es gab kein Timerablauf-Ereignis. |
 | **Ergebnis**       | Bestanden |
 
+---
+
+### IT-10 – Fehlbedienung: Leistungsänderung bei inaktiver Zone
+
+**Ziel:** Prüfen, ob eine Leistungsänderung auf einer **inaktiven** Zone als Fehlbedienung erkannt und als Warnung ausgegeben wird.
+
+| Punkt              | Beschreibung                                                                 |
+|--------------------|------------------------------------------------------------------------------|
+| **Komponenten**    | `HmiInput`, `CooktopController`, `ZoneManager`, `MisuseDetector`, `HmiOutput` |
+| **Vorbedingung**   | Kochfeld initialisiert. Zone `FRONT_RIGHT` ist **inaktiv**, Leistungsstufe = 0, Kindersicherung = aus. |
+| **Aktion**         | Aufruf von `hmi.increasePower(FRONT_RIGHT)`. |
+| **Erwartete Reaktion** | Der `CooktopController` erkennt, dass die Zone nicht aktiv ist, ruft `MisuseDetector.registerInvalidOperation(...)` auf und `HmiOutput.showWarning(...)` meldet eine Fehlbedienung. Es erfolgt keine Änderung an `ZoneManager` oder `PowerControl`. |
+| **Nachbedingung**  | `ZoneManager.isActive(FRONT_RIGHT)` bleibt **false**, Leistungsstufe bleibt 0; in der Konsole ist eine Warnmeldung zur Fehlbedienung sichtbar. |
+| **Ergebnis**       | – |
+
+---
+
+### IT-11 – Fehlbedienung: Eingaben bei aktiver Kindersicherung
+
+**Ziel:** Prüfen, ob Benutzeraktionen bei aktiver Kindersicherung als Fehlbedienung gewertet und sowohl Fehler- als auch Warnmeldungen ausgelöst werden.
+
+| Punkt              | Beschreibung                                                                 |
+|--------------------|------------------------------------------------------------------------------|
+| **Komponenten**    | `HmiInput`, `CooktopController`, `SafetyManager`, `MisuseDetector`, `HmiOutput` |
+| **Vorbedingung**   | Zone `FRONT_LEFT` ist aktiv, Leistungsstufe = 0. `SafetyManager.isLocked() = true` (Kindersicherung EIN). Kein Timer gesetzt. |
+| **Aktion**         | Aufruf von `hmi.setTimer(FRONT_LEFT, 5)` oder `hmi.increasePower(FRONT_LEFT)`. |
+| **Erwartete Reaktion** | Der Controller prüft `SafetyManager.isLocked()` und blockiert die Aktion. `HmiOutput.showError("Bedienung gesperrt")` und `HmiOutput.showLock(true)` werden aufgerufen. Zusätzlich registriert der `MisuseDetector` die Fehlbedienung und löst `HmiOutput.showWarning(...)` aus. |
+| **Nachbedingung**  | Leistungsstufe bleibt 0, es wird **kein** Timer gesetzt; Sperrzustand bleibt aktiv; Konsole zeigt Fehler- und Warnmeldung. |
+| **Ergebnis**       | – |
+
+---
+
+### IT-12 – Fehlbedienung: Ungültige Timerdauer
+
+**Ziel:** Prüfen, ob eine ungültige Timerdauer (z. B. 0 oder negativer Wert) als Fehlbedienung erkannt und sauber abgefangen wird.
+
+| Punkt              | Beschreibung                                                                 |
+|--------------------|------------------------------------------------------------------------------|
+| **Komponenten**    | `HmiInput`, `CooktopController`, `TimerManager`, `MisuseDetector`, `HmiOutput` |
+| **Vorbedingung**   | Zone `FRONT_LEFT` ist aktiv, Kindersicherung = aus, es ist kein Timer gesetzt. |
+| **Aktion**         | Aufruf von `hmi.setTimer(FRONT_LEFT, 0)` (alternativ ein negativer Wert). |
+| **Erwartete Reaktion** | Der `CooktopController` erkennt die ungültige Dauer, ruft `HmiOutput.showError("Timerdauer muss > 0 sein")` auf und registriert die Aktion im `MisuseDetector`, der eine Warnung über `HmiOutput.showWarning(...)` ausgibt. Im `TimerManager` wird **kein** Timer angelegt. |
+| **Nachbedingung**  | Für `FRONT_LEFT` existiert weiterhin **kein** aktiver Timer; der Zonenstatus bleibt unverändert; Konsole zeigt Fehler- und Warnmeldung. |
+| **Ergebnis**       | – |
