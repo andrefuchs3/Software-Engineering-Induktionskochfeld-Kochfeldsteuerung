@@ -12,7 +12,6 @@ Die Implementierungsumgebung entspricht Sprint 2:
 Die Modul- und Paketstruktur wurde um die Fehlbedienungserkennung erweitert:
 
 ```text
-
 /src/
 ├─ core
 │ ├─ CooktopController.java (erweitert: Fehlbedienungslogik)
