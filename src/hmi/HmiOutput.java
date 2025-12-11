@@ -3,8 +3,10 @@ package hmi;
 import util.Types.ZoneID;
 
 /**
- * Vereinfachte Anzeige-Ausgabe (Platzhalter: Konsole/Log).
- * Wird in Sprint 2 um Timer- und Fehleranzeigen erweitert.
+ * Anzeige-Ausgabe (Platzhalter: Konsole/Log).
+ * Sprint 1: Basisanzeigen
+ * Sprint 2: Timer & Rückmeldungen
+ * Sprint 3: Warnmeldungen bei Fehlbedienung
  */
 public class HmiOutput {
 
@@ -45,5 +47,16 @@ public class HmiOutput {
     /** Einfache "akustische" Rückmeldung über die Konsole. */
     public void beep() {
         System.out.println("[HMI] *BEEP*");
+    }
+
+    // -------------------------------------------------------------------------
+    // Erweiterungen Sprint 3 – Fehlbedienungserkennung (F-14)
+    // -------------------------------------------------------------------------
+
+    /**
+     * Warnmeldungen bei wiederholter Fehlbedienung (z. B. falsche Zone, gesperrte Bedienung).
+     */
+    public void showWarning(String message) {
+        System.out.printf("[HMI] WARNUNG: %s%n", message);
     }
 }
