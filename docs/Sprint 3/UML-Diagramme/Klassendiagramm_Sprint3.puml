@@ -1,0 +1,106 @@
+@startuml
+package core {
+    class CooktopController {
+        - zones : ZoneManager
+        - power  : PowerControl
+        - out    : HmiOutput
+        + setZoneActive(z : ZoneID, active : boolean)
+        + increasePower(z : ZoneID)
+        + decreasePower(z : ZoneID)
+        + setPowerLevel(z : ZoneID, level : int)
+        + toggleChildLock()
+        - preCheck(z : ZoneID) : boolean
+    }
+
+    class ZoneManager {
+        - zones : Map<ZoneID, boolean>
+        + setActive(z : ZoneID, active : boolean)
+        + isActive(z : ZoneID) : boolean
+    }
+
+    class PowerControl {
+        - levels : Map<ZoneID, int>
+        + increaseLevel(z : ZoneID)
+        + decreaseLevel(z : ZoneID)
+        + setLevel(z : ZoneID, level : int)
+        + getLevel(z : ZoneID) : int
+    }
+}
+
+package hmi {
+    class HmiInput {
+        - controller : CooktopController
+        + selectZone(z : ZoneID, active : boolean)
+        + increasePower(z : ZoneID)
+        + decreasePower(z : ZoneID)
+        + toggleChildLock()
+        + setTimer(z : ZoneID, seconds : int)
+        + changeTimer(z : ZoneID, seconds : int)
+        + cancelTimer(z : ZoneID)
+        + tickTimer()
+    }
+
+    class HmiOutput {
+        + showActiveZone(z : ZoneID, active : boolean)
+        + showPowerLevel(z : ZoneID, level : int)
+        + showLock(locked : boolean)
+        + showError(message : String)
+        + showWarning(message : String)
+        + showTimer(z : ZoneID, seconds : int)
+        + showTimerExpired(z : ZoneID)
+        + beep()
+    }
+}
+
+package safety {
+    class SafetyManager {
+        - instance : SafetyManager
+        - childLock : boolean
+        + getInstance() : SafetyManager
+        + isLocked() : boolean
+        + lockInput()
+        + unlockInput()
+    }
+
+    class MisuseDetector {
+        - instance : MisuseDetector
+        - invalidOperationCount : int
+        - threshold : int
+        + getInstance() : MisuseDetector
+        + registerInvalidOperation(reason : String, out : HmiOutput)
+    }
+}
+
+package timer {
+    class TimerManager {
+        - remaining : Map<ZoneID, int>
+        + startTimer(z : ZoneID, seconds : int)
+        + changeTimer(z : ZoneID, seconds : int)
+        + cancelTimer(z : ZoneID)
+        + tick()
+    }
+}
+
+package util {
+    enum ZoneID {
+        FRONT_LEFT
+        FRONT_RIGHT
+        BACK_LEFT
+        BACK_RIGHT
+    }
+}
+
+CooktopController --> ZoneManager
+CooktopController --> PowerControl
+CooktopController --> SafetyManager
+CooktopController --> MisuseDetector
+CooktopController --> HmiOutput
+CooktopController --> TimerManager
+
+HmiInput --> CooktopController
+HmiOutput ..> ZoneID
+SafetyManager ..> HmiOutput : nutzt für Lock-Anzeige (indirekt)
+MisuseDetector ..> HmiOutput : nutzt für Warnungen
+TimerManager ..> ZoneID
+
+@enduml
