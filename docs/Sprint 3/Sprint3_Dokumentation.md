@@ -27,8 +27,7 @@ Folgende Requirements aus der Traceability-Matrix werden in Sprint 3 adressiert:
 - **NF-02**: Keine ungewollte Aktivierung/Deaktivierung  
 - **NF-03**: Schutz gegen unbeabsichtigte Eingaben  
 
-Die Zuordnung zu den Software-Design-Komponenten ist in der  
-[Traceability-Matrix](../Traceability-Matrix.md) dokumentiert.  
+Die Zuordnung zu den Software-Design-Komponenten ist in der [Traceability-Matrix](../Traceability-Matrix.md) dokumentiert.  
 Sprint 3 ergänzt dort insbesondere die Testabdeckung von **F-14**, sowie die Querverbindung zu **NF-02/NF-03**.
 
 ---
