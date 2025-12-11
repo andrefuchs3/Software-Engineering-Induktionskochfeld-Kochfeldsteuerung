@@ -87,3 +87,46 @@
 | Ergebnis           | Bestanden |
 
 ---
+
+### MT-07 – Modul: misuse (MisuseDetector) – Fehlbedienung „Zone nicht aktiv“
+
+**Zweck:** Sicherstellen, dass eine Fehlbedienung bei Leistungsänderung auf einer inaktiven Zone als Fehlbedienung erkannt und registriert wird.
+
+| Punkt              | Beschreibung                                                                 |
+|--------------------|------------------------------------------------------------------------------|
+| Modul              | misuse (MisuseDetector)                                                      |
+| Vorbedingung       | `MisuseDetector` ist initialisiert. Es liegt noch **keine** Fehlbedienung für `FRONT_RIGHT` vor. |
+| Aktion             | Aufruf von `registerInvalidOperation("ZONE_NOT_ACTIVE", …)` für Zone `FRONT_RIGHT`. |
+| Erwartete Reaktion | Die Methode akzeptiert die Fehlbedienung und kennzeichnet sie intern (z. B. Zähler/Log). Optional wird eine Warnung vorbereitet. |
+| Nachbedingung      | Die Fehlbedienung „Zone nicht aktiv“ ist im `MisuseDetector` erfasst (z. B. über internen Status oder Statistik). |
+| Ergebnis           | – |
+
+---
+
+### MT-08 – Modul: misuse (MisuseDetector) – Fehlbedienung „Eingabe gesperrt“
+
+**Zweck:** Prüfen, ob Eingaben bei aktiver Kindersicherung als eigene Fehlbedienungskategorie behandelt werden.
+
+| Punkt              | Beschreibung                                                                 |
+|--------------------|------------------------------------------------------------------------------|
+| Modul              | misuse (MisuseDetector)                                                      |
+| Vorbedingung       | `MisuseDetector` ist initialisiert. Ein Reason-Typ für gesperrte Eingaben (z. B. `"LOCKED_INPUT"`) ist definiert/verwendbar. |
+| Aktion             | Aufruf von `registerInvalidOperation("LOCKED_INPUT", …)` bei aktiver Kindersicherung. |
+| Erwartete Reaktion | Die Fehlbedienung wird registriert; der MisuseDetector unterscheidet sie intern von anderen Gründen (z. B. separater Eintrag/Code). |
+| Nachbedingung      | Die Kategorie „LOCKED_INPUT“ ist intern hinterlegt; spätere Auswertungen können zwischen verschiedenen Fehlbedienungen differenzieren. |
+| Ergebnis           | – |
+
+---
+
+### MT-09 – Modul: misuse (MisuseDetector) – Fehlbedienung „Ungültige Timerdauer“
+
+**Zweck:** Sicherstellen, dass ungültige Parameter (z. B. Timerdauer ≤ 0) als Fehlbedienung erfasst werden.
+
+| Punkt              | Beschreibung                                                                 |
+|--------------------|------------------------------------------------------------------------------|
+| Modul              | misuse (MisuseDetector)                                                      |
+| Vorbedingung       | `MisuseDetector` ist initialisiert. Es ist kein Eintrag für „INVALID_TIMER_VALUE“ vorhanden. |
+| Aktion             | Aufruf von `registerInvalidOperation("INVALID_TIMER_VALUE", …)` im Kontext eines fehlerhaften Timer-Setzens. |
+| Erwartete Reaktion | Die Fehlbedienung wird akzeptiert und intern dokumentiert; es werden keine Ausnahmen geworfen. |
+| Nachbedingung      | Die Fehlbedienung „INVALID_TIMER_VALUE“ ist im `MisuseDetector` hinterlegt und kann für Logging/Auswertung genutzt werden. |
+| Ergebnis           | – |
