@@ -1,0 +1,21 @@
+@startuml
+actor User
+participant HmiInput
+participant CooktopController
+participant SafetyManager
+participant MisuseDetector
+participant HmiOutput
+
+User -> HmiInput : increasePower(FRONT_LEFT)
+HmiInput -> CooktopController : increasePower(FRONT_LEFT)
+
+CooktopController -> SafetyManager : isLocked()
+SafetyManager --> CooktopController : true
+
+CooktopController -> HmiOutput : showError("Bedienung gesperrt")
+CooktopController -> HmiOutput : showLock(true)
+
+CooktopController -> MisuseDetector : registerInvalidOperation("Bedienung bei aktiver Kindersicherung", out)
+MisuseDetector -> HmiOutput : showWarning("Fehlbedienung erkannt ...") # optional, erst ab Schwellwert
+
+@enduml
