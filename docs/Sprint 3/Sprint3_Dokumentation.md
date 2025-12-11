@@ -191,8 +191,7 @@ Zur Verifikation der in **Sprint 3** implementierten Fehlbedienungserkennung wur
 Die neuen Testfälle auf **Modulebene** (MT-07, MT-08) und **Integrationsebene** (IT-10, IT-11) wurden ausgeführt.  
 Zusätzlich wurden die Tests aus **Sprint 1** (`Test_Sprint1.java`) und **Sprint 2** (`Test_Sprint2.java`) erneut genutzt, um Regressionen auszuschließen.
 
-Die Testausführung für Sprint 3 erfolgt über die Datei  
-[`Test_Sprint3.java`](../../tests/Test_Sprint3.java), welche
+Die Testausführung für Sprint 3 erfolgt über die Datei [`Test_Sprint3.java`](../../tests/Test_Sprint3.java), welche
 
 - gezielt **Fehlbedienungsszenarien erzeugt**,  
 - die **Ausgaben von HmiOutput (Fehler/Warnungen)** in der Konsole sichtbar macht,  
