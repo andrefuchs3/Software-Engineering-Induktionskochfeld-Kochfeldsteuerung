@@ -222,7 +222,6 @@ Die geplante Erweiterung um Fehlbedienungserkennung wurde mit der konkreten Impl
   - Nachteil: Fehlbedienungslogik ist mit der Steuerlogik gekoppelt, später ggf. auslagerbar.
 
 - Die Fehlbedienungserkennung arbeitet mit einem **einfachen Zähler pro Zone** und einem Schwellwert (z. B. ab 3 Fehlversuchen).  
-  - Dies wurde bewusst einfach gehalten, da die Übung den Fokus auf Nachvollziehbarkeit und Traceability legt, nicht auf komplexe Heuristiken.
 
 Insgesamt bleibt die Implementierung im Rahmen der geplanten Architektur und ergänzt diese um eine klar abgegrenzte Verantwortung: **Erkennen und Melden von Fehlbedienungen**.
 
