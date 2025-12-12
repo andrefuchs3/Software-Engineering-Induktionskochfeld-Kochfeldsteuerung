@@ -5,7 +5,7 @@ von Andre Fuchs
 
 unter Leitung durch Prof. Dr. Karsten Becker, TH Deggendorf
 
-## Repository:
+### Repository:
 
 [Github Repository](https://github.com/andrefuchs3/Software-Engineering-Induktionskochfeld-Kochfeldsteuerung)
 
