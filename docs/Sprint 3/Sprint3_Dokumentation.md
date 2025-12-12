@@ -299,8 +299,3 @@ hat sich erneut bewährt.
 Auch zukünftige Erweiterungen sollten konsequent über die
 Traceability-Matrix und die Sprint-Dokumentation nachvollziehbar gemacht werden.
 
----
-
-Diese Retrospektive schließt **Sprint 3** ab und reflektiert sowohl die
-technischen Ergebnisse als auch die gewonnenen Erkenntnisse für zukünftige
-Arbeiten an der Kochfeldsteuerung.
