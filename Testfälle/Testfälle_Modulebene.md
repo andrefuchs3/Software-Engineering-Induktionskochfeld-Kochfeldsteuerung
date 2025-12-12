@@ -99,7 +99,7 @@
 | Aktion             | Aufruf von `registerInvalidOperation("ZONE_NOT_ACTIVE", …)` für Zone `FRONT_RIGHT`. |
 | Erwartete Reaktion | Die Methode akzeptiert die Fehlbedienung und kennzeichnet sie intern (z. B. Zähler/Log). Optional wird eine Warnung vorbereitet. |
 | Nachbedingung      | Die Fehlbedienung „Zone nicht aktiv“ ist im `MisuseDetector` erfasst (z. B. über internen Status oder Statistik). |
-| Ergebnis           | – |
+| Ergebnis           | Bestanden |
 
 ---
 
@@ -114,7 +114,7 @@
 | Aktion             | Aufruf von `registerInvalidOperation("LOCKED_INPUT", …)` bei aktiver Kindersicherung. |
 | Erwartete Reaktion | Die Fehlbedienung wird registriert; der MisuseDetector unterscheidet sie intern von anderen Gründen (z. B. separater Eintrag/Code). |
 | Nachbedingung      | Die Kategorie „LOCKED_INPUT“ ist intern hinterlegt; spätere Auswertungen können zwischen verschiedenen Fehlbedienungen differenzieren. |
-| Ergebnis           | – |
+| Ergebnis           | Bestanden |
 
 ---
 
@@ -129,4 +129,4 @@
 | Aktion             | Aufruf von `registerInvalidOperation("INVALID_TIMER_VALUE", …)` im Kontext eines fehlerhaften Timer-Setzens. |
 | Erwartete Reaktion | Die Fehlbedienung wird akzeptiert und intern dokumentiert; es werden keine Ausnahmen geworfen. |
 | Nachbedingung      | Die Fehlbedienung „INVALID_TIMER_VALUE“ ist im `MisuseDetector` hinterlegt und kann für Logging/Auswertung genutzt werden. |
-| Ergebnis           | – |
+| Ergebnis           | Bestanden |
