@@ -195,8 +195,7 @@ z. B.:
 - Fehlbedienungserkennung (`MisuseDetector`)
 - Timerverwaltung (`TimerManager`)
 
-📄 Dokumentation:  
-`Sprint1_Test_Modulebene.md`, `Sprint2_Test_Modulebene.md`, `Sprint3_Test_Modulebene.md`
+📄 Dokumentation: `Testfälle/Testfälle_Modulebene.md`
 
 ---
 
@@ -211,8 +210,7 @@ Typische Integrationen:
 - `CooktopController ↔ SafetyManager`
 - `CooktopController ↔ MisuseDetector`
 
-📄 Dokumentation:  
-`Sprint1_Test_Integrationsebene.md`, `Sprint2_Test_Integrationsebene.md`, `Sprint3_Test_Integrationsebene.md`
+📄 Dokumentation: `Testfälle/Testfälle_Integrationsebene.md`
 
 ---
 
