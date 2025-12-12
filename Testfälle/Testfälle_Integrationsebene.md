@@ -143,7 +143,7 @@
 | **Aktion**         | Aufruf von `hmi.increasePower(FRONT_RIGHT)`. |
 | **Erwartete Reaktion** | Der `CooktopController` erkennt, dass die Zone nicht aktiv ist, ruft `MisuseDetector.registerInvalidOperation(...)` auf und `HmiOutput.showWarning(...)` meldet eine Fehlbedienung. Es erfolgt keine Änderung an `ZoneManager` oder `PowerControl`. |
 | **Nachbedingung**  | `ZoneManager.isActive(FRONT_RIGHT)` bleibt **false**, Leistungsstufe bleibt 0; in der Konsole ist eine Warnmeldung zur Fehlbedienung sichtbar. |
-| **Ergebnis**       | – |
+| **Ergebnis**       | Bestanden |
 
 ---
 
@@ -158,7 +158,7 @@
 | **Aktion**         | Aufruf von `hmi.setTimer(FRONT_LEFT, 5)` oder `hmi.increasePower(FRONT_LEFT)`. |
 | **Erwartete Reaktion** | Der Controller prüft `SafetyManager.isLocked()` und blockiert die Aktion. `HmiOutput.showError("Bedienung gesperrt")` und `HmiOutput.showLock(true)` werden aufgerufen. Zusätzlich registriert der `MisuseDetector` die Fehlbedienung und löst `HmiOutput.showWarning(...)` aus. |
 | **Nachbedingung**  | Leistungsstufe bleibt 0, es wird **kein** Timer gesetzt; Sperrzustand bleibt aktiv; Konsole zeigt Fehler- und Warnmeldung. |
-| **Ergebnis**       | – |
+| **Ergebnis**       | Bestanden |
 
 ---
 
@@ -173,4 +173,4 @@
 | **Aktion**         | Aufruf von `hmi.setTimer(FRONT_LEFT, 0)` (alternativ ein negativer Wert). |
 | **Erwartete Reaktion** | Der `CooktopController` erkennt die ungültige Dauer, ruft `HmiOutput.showError("Timerdauer muss > 0 sein")` auf und registriert die Aktion im `MisuseDetector`, der eine Warnung über `HmiOutput.showWarning(...)` ausgibt. Im `TimerManager` wird **kein** Timer angelegt. |
 | **Nachbedingung**  | Für `FRONT_LEFT` existiert weiterhin **kein** aktiver Timer; der Zonenstatus bleibt unverändert; Konsole zeigt Fehler- und Warnmeldung. |
-| **Ergebnis**       | – |
+| **Ergebnis**       | Bestanden |
