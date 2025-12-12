@@ -259,8 +259,6 @@ Sprint 2 (`Test_Sprint2.java`) bestätigte, dass die Erweiterungen aus Sprint 3
 keine negativen Auswirkungen auf bestehende Funktionen
 (Leistungsregelung, Timer, Kindersicherung) hatten.
 
----
-
 ### 7.2 Herausforderungen und Verbesserungspotenziale
 
 #### Einsatz eines Testframeworks nicht möglich
@@ -281,8 +279,6 @@ Die aktuelle Fehlbedienungserkennung basiert auf einfachen Bedingungen
 (z. B. Zone inaktiv, Kindersicherung aktiv) und Zählwerten.  
 Für ein reales Produkt wären komplexere Regeln und differenziertere
 Auswertungen sinnvoll.
-
----
 
 ### 7.3 Konsequenzen für zukünftige Erweiterungen
 
