@@ -115,8 +115,6 @@ Zentrale Entwurfsentscheidungen waren:
 Die Implementierung erfolgte iterativ in drei aufeinander aufbauenden Sprints.
 Jeder Sprint erweitert das System funktional und strukturell, ohne bestehende Funktionalität zu beeinträchtigen.
 
----
-
 ### 5.1 Sprint 1 – Basisfunktionalität
 
 Sprint 1 konzentrierte sich auf die grundlegenden Steuerungsfunktionen des Kochfeldes.
