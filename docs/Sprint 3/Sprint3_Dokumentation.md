@@ -94,76 +94,77 @@ Die Diagramme erweitern konsistent die in Sprint 1 und 2 eingeführte Architektu
 
 ## 1. Zielsetzung der Testaktivitäten
 
-In **Sprint 3** wurde die Kochfeldsteuerung um eine Logik zur Erkennung von Fehlbedienungen erweitert.  
-Die Testaktivitäten verfolgen folgende Ziele:
+In **Sprint 3** wurde die Kochfeldsteuerung um eine Logik zur Erkennung von Fehlbedienungen erweitert.
+Ziel der Testaktivitäten ist es daher,
 
-- Nachweis, dass **ungültige Eingaben korrekt erkannt und gezählt** werden,  
-- Nachweis, dass **ab einem definierten Schwellwert** eine Warnmeldung ausgegeben wird,  
-- Sicherstellung, dass bestehende Funktionen aus Sprint 1 und 2 (Timer, Zonensteuerung, Kindersicherung) **nicht negativ beeinflusst** werden (Regression).
+- sicherzustellen, dass **ungültige Benutzereingaben zuverlässig erkannt** werden,
+- zu prüfen, dass **Warnmeldungen bei wiederholter Fehlbedienung korrekt ausgegeben** werden,
+- nachzuweisen, dass bestehende Funktionen aus **Sprint 1 und Sprint 2 unverändert korrekt funktionieren** (Regression).
 
-Es werden wie bisher zwei Ebenen betrachtet:
+Die Teststrategie basiert – wie in den vorherigen Sprints – auf zwei Ebenen:
 
-- **Modulebene**: Fokus auf den `CooktopController` (Fehlbedienungszähler, interne Logik)  
-- **Integrationsebene**: Zusammenspiel von `HmiInput`, `CooktopController` und `HmiOutput` bei Fehlbedienungen
+- **Modulebene**: Prüfung der Logik im `CooktopController` (Fehlbedienung, Zählung, Rücksetzen),
+- **Integrationsebene**: Prüfung des Zusammenspiels von `HmiInput`, `CooktopController` und `HmiOutput`.
+
+Ein automatisiertes Testframework (z. B. JUnit) wurde im Sprint erprobt, konnte jedoch in der gegebenen
+Projekt- und Toolumgebung nicht stabil integriert werden.
+Aus diesem Grund wurde eine **eigene, automatisierte Testlogik in Java** implementiert,
+die eine eindeutige **PASS/FAIL-Auswertung** pro Testfall erlaubt.
 
 ---
 
 ## 2. Testfälle auf Modulebene
 
-Auf Modulebene steht die neue Fehlbedienungslogik im `CooktopController` im Vordergrund.  
-Die Tests greifen direkt auf Controller-Methoden zu (ohne HMI), um die Zähler- und Resetlogik isoliert zu prüfen.
+Auf Modulebene liegt der Fokus in **Sprint 3** auf der erweiterten Fehlbedienungslogik
+im `CooktopController`.
 
-[📄 Testfälle – Modulebene](../../Testfälle/Testfälle_Modulebene.md)
+Die Tests prüfen dabei insbesondere,
 
-Die neuen Testfälle für Sprint 3 sind:
+- ob ungültige Aktionen als Fehlbedienung erkannt werden,
+- ob wiederholte Fehlbedienungen korrekt verarbeitet werden,
+- dass keine Exceptions oder unerwünschten Zustandsänderungen auftreten.
 
-| Test-ID | Modul                    | Zweck                                                   |
-|--------:|--------------------------|---------------------------------------------------------|
-| MT-07   | core (CooktopController) | Zählung mehrerer Fehlbedienungen an einer Zone         |
-| MT-08   | core (CooktopController) | Rücksetzen des Fehlbedienungszählers nach gültiger Eingabe |
+Die folgenden **neuen Modultests** wurden in Sprint 3 ergänzt und automatisiert umgesetzt:
 
-Kurzbeschreibung:
+| Test-ID | Modul | Zweck |
+|--------:|-------|-------|
+| MT-07 | core (CooktopController) | Fehlbedienung bei inaktiver Zone wird erkannt |
+| MT-08 | core (CooktopController) | Fehlbedienung bei aktiver Kindersicherung |
+| MT-09 | core (CooktopController) | Ungültiger Timerwert (0 / negativ) |
 
-- **MT-07 – Fehlbedienung zählen**  
-  - Mehrfach ungültige Aktionen (z. B. Leistungsänderung bei inaktiver Zone oder bei aktiver Kindersicherung) werden ausgelöst.  
-  - Erwartung: Der interne Zähler wird pro Fehlversuch erhöht; ab Erreichen des Schwellwertes wird eine Warnung ausgelöst.
-
-- **MT-08 – Zähler zurücksetzen**  
-  - Nach einem oder mehreren Fehlversuchen wird eine gültige Aktion ausgeführt (z. B. Zone korrekt aktivieren und Leistungsstufe ändern).  
-  - Erwartung: Der Fehlbedienungszähler für diese Zone wird zurückgesetzt, weitere gültige Eingaben erzeugen keine Warnungen.
+Die Modultests werden über die Datei  
+`Test_Sprint3.java` ausgeführt und automatisch als **PASS oder FAIL** bewertet.
 
 ---
 
 ## 3. Testfälle auf Integrationsebene
 
-Auf Integrationsebene wird geprüft, ob Fehlbedienungen über die HMI-Eingaben ausgelöst, vom Controller erkannt und über `HmiOutput` korrekt gemeldet werden.
+Auf Integrationsebene wird geprüft, ob Fehlbedienungen über die HMI ausgelöst,
+vom `CooktopController` erkannt und über das `HmiOutput` korrekt gemeldet werden.
 
-[📄 Testfälle – Integrationsebene](../../Testfälle/Testfälle_Integrationsebene.md)
+Dabei wird das vollständige Zusammenspiel folgender Komponenten getestet:
 
-Die neuen Integrationstests für Sprint 3 sind:
+- `HmiInput`
+- `CooktopController`
+- `HmiOutput`
+- `SafetyManager`
 
-| Test-ID | Komponenten                                      | Zielsetzung                                                   |
-|--------:|--------------------------------------------------|----------------------------------------------------------------|
-| IT-10   | HmiInput ↔ CooktopController ↔ HmiOutput         | Fehlbedienung bei aktiver Kindersicherung (Sperrzustand)      |
-| IT-11   | HmiInput ↔ CooktopController ↔ HmiOutput         | Wiederholte Fehlbedienung an inaktiver Zone mit Warnung       |
+Die folgenden **neuen Integrationstests** wurden in Sprint 3 ergänzt:
 
-Kurzbeschreibung:
+| Test-ID | Komponenten | Ziel |
+|--------:|------------|------|
+| IT-10 | HmiInput ↔ Controller ↔ HmiOutput | Leistungsänderung bei inaktiver Zone |
+| IT-11 | HmiInput ↔ Controller ↔ HmiOutput | Eingaben bei aktiver Kindersicherung |
+| IT-12 | HmiInput ↔ Controller ↔ HmiOutput | Ungültige Timerwerte (0 / negativ) |
 
-- **IT-10 – Fehlbedienung bei aktiver Kindersicherung**  
-  - Kindersicherung wird über HMI aktiviert.  
-  - Anschließend werden wiederholt Eingaben ausgeführt (z. B. Zone aktivieren, Leistung ändern).  
-  - Erwartung:  
-    - `HmiOutput.showError("Bedienung gesperrt")` wird aufgerufen.  
-    - Ab mehreren Fehlversuchen wird zusätzlich `HmiOutput.showWarning(...)` ausgegeben.
+Die Tests prüfen unter anderem,
 
-- **IT-11 – Fehlbedienung an inaktiver Zone**  
-  - Zone bleibt inaktiv, es werden aber wiederholt Leistungsänderungen über HMI versucht.  
-  - Erwartung:  
-    - Fehlermeldung „Zone nicht aktiv“ über `showError(...)`.  
-    - Nach mehreren Fehlversuchen Warnmeldung über `showWarning(...)`.  
-    - Sobald die Zone korrekt aktiviert wird, werden weitere Eingaben als gültig behandelt und der Zähler zurückgesetzt.
+- dass keine Leistungsänderung oder Aktivierung erfolgt,
+- dass Fehlermeldungen korrekt ausgegeben werden,
+- dass Warnmeldungen bei Fehlbedienung erscheinen.
 
-Damit wird sichergestellt, dass die Fehlbedienungserkennung aus Benutzersicht nachvollziehbar und konsistent ist.
+Alle Integrationstests werden automatisiert über `Test_Sprint3.java` ausgeführt
+und liefern eine eindeutige PASS/FAIL-Ausgabe in der Konsole.
 
 ---
 
@@ -187,19 +188,21 @@ Damit ist dokumentiert, wie die neue Fehlbedienungslogik die übergeordneten Qua
 
 ## 5. Durchgeführte Testläufe und Dokumentation der Ergebnisse
 
-Zur Verifikation der in **Sprint 3** implementierten Fehlbedienungserkennung wurde ein eigener Testdurchlauf durchgeführt.  
-Die neuen Testfälle auf **Modulebene** (MT-07, MT-08) und **Integrationsebene** (IT-10, IT-11) wurden ausgeführt.  
-Zusätzlich wurden die Tests aus **Sprint 1** (`Test_Sprint1.java`) und **Sprint 2** (`Test_Sprint2.java`) erneut genutzt, um Regressionen auszuschließen.
+Für Sprint 3 wurde ein vollständiger Testdurchlauf durchgeführt.
 
-Die Testausführung für Sprint 3 erfolgt über die Datei [`Test_Sprint3.java`](../../tests/Test_Sprint3.java), welche
+Dabei kamen folgende Testdateien zum Einsatz:
 
-- gezielt **Fehlbedienungsszenarien erzeugt**,  
-- die **Ausgaben von HmiOutput (Fehler/Warnungen)** in der Konsole sichtbar macht,  
-- die **Reaktionen des Controllers auf gültige und ungültige Eingaben** strukturiert dokumentiert.
+- `Test_Sprint1.java` – automatisierte Tests für Sprint 1 (Regression)
+- `Test_Sprint2.java` – automatisierte Tests für Sprint 2 (Regression)
+- `Test_Sprint3.java` – neue Tests für Fehlbedienung und Warnlogik
 
-Die Konsolenausgaben wurden mit den definieren Erwartungen aus den Testfalldefinitionen abgeglichen.  
-Alle Testfälle wurden im Rahmen der manuellen Sichtprüfung als **bestanden** bewertet.  
-Die vorherigen Funktionalitäten aus Sprint 1 und 2 blieben unverändert funktionsfähig.
+Alle Tests wurden ohne externes Testframework ausgeführt.
+Stattdessen wurde eine eigene, automatisierte Testlogik implementiert,
+die jeden Testfall eindeutig als **PASS** oder **FAIL** bewertet.
+
+Die Konsolenausgaben aller Testläufe zeigen,
+dass sämtliche Testfälle erfolgreich bestanden wurden.
+Es traten keine Regressionen in den Funktionen aus Sprint 1 und 2 auf.
 
 ---
 
@@ -230,38 +233,78 @@ Insgesamt bleibt die Implementierung im Rahmen der geplanten Architektur und erg
 
 ### 7.1 Positiv aufgefallene Punkte
 
-- **Erweiterbarkeit der bestehenden Architektur**  
-  Die bereits in Sprint 1 und 2 etablierte Struktur konnte ohne Bruch um Fehlbedienungslogik ergänzt werden.  
-  Der `CooktopController` ist weiterhin der zentrale Ort für Steuerungsentscheidungen.
+#### Erweiterbarkeit der bestehenden Architektur
+Die in Sprint 1 und Sprint 2 etablierte Architektur konnte ohne strukturelle Änderungen
+um die Fehlbedienungserkennung erweitert werden.  
+Der `CooktopController` blieb die zentrale Instanz für Steuerungsentscheidungen,
+wodurch neue Logik (z. B. Fehlbedienungszähler, Warnmeldungen) konsistent
+integriert werden konnte.
 
-- **Klarere Rückmeldungen an den Benutzer**  
-  Durch die Trennung von `showError(...)` (konkreter Fehler) und `showWarning(...)` (Hinweis auf wiederholte Fehlbedienungen) wird das Verhalten für den Benutzer transparenter.
+#### Verbesserte Benutzerführung durch Warnmeldungen
+Die zusätzliche Unterscheidung zwischen Fehlermeldungen (`showError(...)`)
+und Warnmeldungen (`showWarning(...)`) führte zu einer klareren und besser
+nachvollziehbaren Rückmeldung für den Benutzer, insbesondere bei wiederholten
+Fehlbedienungen.
 
-- **Regressionstests über mehrere Sprints**  
-  Das erneute Ausführen der Tests aus Sprint 1 und 2 hat gezeigt, dass neue Funktionen ohne Seiteneffekte integriert werden können, wenn die Traceability und Teststruktur konsequent gepflegt wird.
+#### Automatisierte Tests ohne externes Framework
+Obwohl ursprünglich der Einsatz eines klassischen Testframeworks
+(z. B. JUnit) vorgesehen war, konnte durch eine selbst implementierte Testlogik
+eine zuverlässige automatisierte **PASS/FAIL-Auswertung** realisiert werden.  
+Dieses Vorgehen erwies sich als praktikabel und ermöglichte eine konsistente
+Testdurchführung über alle drei Sprints hinweg.
+
+#### Erfolgreiche Regressionstests
+Die erneute Ausführung der Tests aus Sprint 1 (`Test_Sprint1.java`) und
+Sprint 2 (`Test_Sprint2.java`) bestätigte, dass die Erweiterungen aus Sprint 3
+keine negativen Auswirkungen auf bestehende Funktionen
+(Leistungsregelung, Timer, Kindersicherung) hatten.
+
+---
 
 ### 7.2 Herausforderungen und Verbesserungspotenziale
 
-- **Manuelle Auswertung weiterhin notwendig**  
-  Auch für Sprint 3 basieren viele Bewertungen auf Konsolenausgaben, insbesondere für Warnmeldungen.  
-  Dies ist auf Dauer aufwendig und anfällig für Übersehfehler.
+#### Einsatz eines Testframeworks nicht möglich
+Der Versuch, die Tests mit einem etablierten Testframework umzusetzen,
+scheiterte an der Projekt- und Toolkonfiguration.  
+Dies erforderte eine Umstellung auf eine eigenständige Testimplementierung,
+die mit zusätzlichem Entwicklungsaufwand verbunden war.
 
-- **Fehlbedienungslogik aktuell relativ einfach**  
-  Die Erkennung basiert lediglich auf Zählerständen und einfachen Bedingungen (gesperrt, Zone inaktiv).  
-  In einem realen Produkt wären differenziertere Regeln und konfigurierbare Schwellwerte sinnvoll.
+#### Abhängigkeit von Konsolenausgaben
+Obwohl die Tests automatisiert ausgeführt werden, basiert ein Teil der Bewertung
+weiterhin auf der Interpretation von Konsolenausgaben
+(z. B. Warn- und Fehlmeldungen).  
+Diese Vorgehensweise ist weniger robust als formale Assertions auf
+Systemzustände oder Rückgabewerte.
+
+#### Einfache Fehlbedienungslogik
+Die aktuelle Fehlbedienungserkennung basiert auf einfachen Bedingungen
+(z. B. Zone inaktiv, Kindersicherung aktiv) und Zählwerten.  
+Für ein reales Produkt wären komplexere Regeln und differenziertere
+Auswertungen sinnvoll.
+
+---
 
 ### 7.3 Konsequenzen für zukünftige Erweiterungen
 
-- **Schrittweise Umstellung auf automatisierte Tests**  
-  - Mittelfristig sollten die Testfälle aus den drei Sprints in ein automatisiertes Test-Framework (z. B. JUnit) überführt werden.  
-  - Das reduziert den manuellen Aufwand und erleichtert Regressionstests.
+#### Weiterentwicklung der Testautomatisierung
+Langfristig ist eine erneute Integration eines Testframeworks sinnvoll,
+um Tests noch klarer, robuster und wartbarer zu gestalten.  
+Die in Sprint 3 entwickelte eigene Teststruktur bildet jedoch bereits
+eine solide Grundlage für automatisierte Regressionstests.
 
-- **Optionale Auslagerung der Fehlbedienungslogik**  
-  - Bei wachsender Komplexität könnte die Logik aus dem `CooktopController` in eine eigene Komponente (z. B. `MisuseDetector`) ausgelagert werden.  
-  - Die aktuelle Implementierung bildet dafür eine erste, klar abgegrenzte Basis.
+#### Mögliche Modularisierung der Fehlbedienungslogik
+Bei wachsender Komplexität könnte die Fehlbedienungserkennung aus dem
+`CooktopController` in eine eigene Komponente ausgelagert werden.  
+Die aktuelle Lösung ist bewusst einfach gehalten und gut nachvollziehbar.
 
-- **Weiterführung der Traceability**  
-  - Die positive Erfahrung mit der Traceability-Matrix und den Sprint-Dokumentationen bestätigt den gewählten Ansatz.  
-  - Auch zukünftige Erweiterungen sollten konsequent über Requirements, Design, Implementierung und Tests nachverfolgt werden.
+#### Konsequente Pflege der Traceability
+Die enge Verknüpfung von Requirements, Design, Implementierung und Tests
+hat sich erneut bewährt.  
+Auch zukünftige Erweiterungen sollten konsequent über die
+Traceability-Matrix und die Sprint-Dokumentation nachvollziehbar gemacht werden.
 
-Diese Ergebnisse schließen die Arbeiten an **Sprint 3** ab und bilden den Endstand der Kochfeldsteuerung für das Projekt.
+---
+
+Diese Retrospektive schließt **Sprint 3** ab und reflektiert sowohl die
+technischen Ergebnisse als auch die gewonnenen Erkenntnisse für zukünftige
+Arbeiten an der Kochfeldsteuerung.
