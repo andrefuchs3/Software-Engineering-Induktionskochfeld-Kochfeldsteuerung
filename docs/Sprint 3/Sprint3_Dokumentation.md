@@ -170,8 +170,7 @@ und liefern eine eindeutige PASS/FAIL-Ausgabe in der Konsole.
 
 ## 4. Bezug zur Traceability-Matrix
 
-Die neuen Testfälle aus Sprint 3 sind in der  
-[Traceability-Matrix](../Traceability-Matrix.md) mit den entsprechenden Requirements verknüpft.
+Die neuen Testfälle aus Sprint 3 sind in der [Traceability-Matrix](../Traceability-Matrix.md) mit den entsprechenden Requirements verknüpft.
 
 **Anforderungsauszug (Sprint 3-Relevanz)**
 
