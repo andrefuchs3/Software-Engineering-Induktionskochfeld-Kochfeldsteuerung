@@ -264,6 +264,4 @@ strukturierte Entwicklung einer komplexen Steuerungssoftware.
 
 Die bestehende Architektur bietet hierfür eine stabile und gut nachvollziehbare Grundlage.
 
----
-
 
