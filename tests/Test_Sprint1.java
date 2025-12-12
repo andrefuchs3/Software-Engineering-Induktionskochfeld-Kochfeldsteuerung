@@ -1,14 +1,66 @@
 import core.CooktopController;
 import hmi.HmiInput;
 import hmi.HmiOutput;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import power.PowerControl;
 import safety.SafetyManager;
 import util.Types.ZoneID;
 
 public class Test_Sprint1 {
 
+    // -------- Mini Test Framework (ohne Framework) --------
+    private static int passed = 0;
+    private static int failed = 0;
+
+    private static void pass(String id, String msg) {
+        passed++;
+        System.out.printf("[PASS] %s: %s%n", id, msg);
+    }
+
+    private static void fail(String id, String msg) {
+        failed++;
+        System.out.printf("[FAIL] %s: %s%n", id, msg);
+    }
+
+    private static void assertTrue(String id, boolean cond, String ok, String bad) {
+        if (cond) pass(id, ok);
+        else fail(id, bad);
+    }
+
+    private static void assertEquals(String id, int expected, int actual, String ok, String bad) {
+        if (expected == actual) pass(id, ok + " (expected=" + expected + ", actual=" + actual + ")");
+        else fail(id, bad + " (expected=" + expected + ", actual=" + actual + ")");
+    }
+
+    private static void assertContains(String id, String haystack, String needle, String ok, String bad) {
+        assertTrue(id, haystack.contains(needle), ok, bad + " (missing: \"" + needle + "\")");
+    }
+
+    // -------- Helper: Console capture --------
+    private static class ConsoleCapture implements AutoCloseable {
+        private final PrintStream originalOut = System.out;
+        private final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+
+        ConsoleCapture() {
+            System.setOut(new PrintStream(buffer));
+        }
+
+        String text() {
+            return buffer.toString();
+        }
+
+        @Override
+        public void close() {
+            System.setOut(originalOut);
+        }
+    }
+
     public static void main(String[] args) {
-        System.out.println("===== Sprint 1 – Testdurchlauf =====");
+        System.out.println("===== Sprint 1 – Tests (ohne Framework) =====");
+
+        // Isolation: definierter Startzustand
+        SafetyManager.getInstance().unlockInput();
 
         runMT01_PowerControl();
         runMT02_SafetyManager();
@@ -18,121 +70,140 @@ public class Test_Sprint1 {
         runIT02_CooktopController_PowerControl();
         runIT03_CooktopController_SafetyManager();
 
+        System.out.println("--------------------------------------------");
+        System.out.printf("Ergebnis: %d PASS, %d FAIL%n", passed, failed);
         System.out.println("===== Testdurchlauf beendet =====");
+
+        if (failed > 0) System.exit(1);
     }
 
     // ---------------- Modulebene ----------------
 
     // MT-01 – PowerControl: Leistungsstufe erhöhen
     private static void runMT01_PowerControl() {
-        System.out.println("\n--- MT-01: PowerControl – Leistungsstufe erhöhen ---");
+        final String ID = "MT-01";
 
         PowerControl power = new PowerControl();
         ZoneID zone = ZoneID.FRONT_LEFT;
 
-        // Vorbedingung: Level = 5 (wir erhöhen 5x von 0 auf 5)
-        for (int i = 0; i < 5; i++) {
-            power.increaseLevel(zone);
-        }
+        for (int i = 0; i < 5; i++) power.increaseLevel(zone);
         int before = power.getLevel(zone);
+
         power.increaseLevel(zone);
         int after = power.getLevel(zone);
 
-        System.out.println("Vorbedingung: Level = " + before);
-        System.out.println("Aktion: increaseLevel(" + zone + ")");
-        System.out.println("Erwartete Nachbedingung: Level = " + (before + 1));
-        System.out.println("Tatsächliche Nachbedingung: Level = " + after);
+        assertEquals(ID, before + 1, after,
+                "Leistungsstufe wurde korrekt erhöht",
+                "Leistungsstufe wurde NICHT korrekt erhöht");
     }
 
     // MT-02 – SafetyManager: Sperren / Entsperren
     private static void runMT02_SafetyManager() {
-        System.out.println("\n--- MT-02: SafetyManager – Sperren / Entsperren ---");
+        final String ID = "MT-02";
 
         SafetyManager sm = SafetyManager.getInstance();
+        sm.unlockInput();
 
-        sm.unlockInput(); // Vorbedingung: entsperrt
-        System.out.println("Vorbedingung: isLocked() = " + sm.isLocked());
-
-        sm.lockInput();   // Aktion
+        sm.lockInput();
         boolean locked = sm.isLocked();
 
-        System.out.println("Aktion: lockInput()");
-        System.out.println("Erwartete Reaktion: isLocked() = true");
-        System.out.println("Tatsächliche Reaktion: isLocked() = " + locked);
+        assertTrue(ID, locked,
+                "Kindersicherung ist nach lockInput() aktiv",
+                "Kindersicherung ist nach lockInput() NICHT aktiv");
 
-        sm.unlockInput(); // Aufräumen
+        sm.unlockInput();
     }
 
     // MT-03 – ZoneID Enum: alle Zonen vorhanden?
     private static void runMT03_ZoneIdEnum() {
-        System.out.println("\n--- MT-03: ZoneID – Auflistung aller Kochzonen ---");
+        final String ID = "MT-03";
 
         ZoneID[] values = ZoneID.values();
+        String all = java.util.Arrays.toString(values);
 
-        System.out.println("Erwartete Werte: FRONT_LEFT, FRONT_RIGHT, BACK_LEFT, BACK_RIGHT");
-        System.out.println("Tatsächliche Werte:");
-        for (ZoneID z : values) {
-            System.out.println(" - " + z);
-        }
+        boolean ok =
+                all.contains("FRONT_LEFT") &&
+                all.contains("FRONT_RIGHT") &&
+                all.contains("BACK_LEFT") &&
+                all.contains("BACK_RIGHT");
+
+        assertTrue(ID, ok,
+                "Alle ZoneID Werte vorhanden",
+                "ZoneID Werte fehlen: " + all);
     }
 
     // ---------------- Integrationsebene ----------------
 
     // IT-01 – HmiInput ↔ CooktopController (Zone aktivieren)
     private static void runIT01_HmiInput_CooktopController() {
-        System.out.println("\n--- IT-01: HmiInput ↔ CooktopController – Zone aktivieren ---");
+        final String ID = "IT-01";
 
         HmiOutput out = new HmiOutput();
         CooktopController ctl = new CooktopController(out);
         HmiInput hmi = new HmiInput(ctl);
 
-        System.out.println("Vorbedingung: Zone FRONT_LEFT ist inaktiv (Initialzustand).");
-        System.out.println("Aktion: hmi.selectZone(FRONT_LEFT, true)");
+        try (ConsoleCapture cc = new ConsoleCapture()) {
+            SafetyManager.getInstance().unlockInput();
 
-        hmi.selectZone(ZoneID.FRONT_LEFT, true);
+            hmi.selectZone(ZoneID.FRONT_LEFT, true);
 
-        System.out.println("Erwartete Wirkung: Ausgabe zeigt Zone FRONT_LEFT = AKTIV.");
-        System.out.println("Tatsächliche Wirkung: siehe HMI-Ausgaben oben.");
+            String txt = cc.text();
+            // orientiert an deiner Ausgabe: "[HMI] Zone FRONT_LEFT AKTIV"
+            assertContains(ID, txt, "Zone FRONT_LEFT AKTIV",
+                    "HMI meldet Zone aktiv",
+                    "HMI meldet Zone NICHT aktiv");
+        }
     }
 
     // IT-02 – CooktopController ↔ PowerControl (Leistungsstufe erhöhen)
     private static void runIT02_CooktopController_PowerControl() {
-        System.out.println("\n--- IT-02: CooktopController ↔ PowerControl – Leistungsstufe erhöhen ---");
+        final String ID = "IT-02";
 
         HmiOutput out = new HmiOutput();
         CooktopController ctl = new CooktopController(out);
         HmiInput hmi = new HmiInput(ctl);
 
-        System.out.println("Vorbedingung: Zone FRONT_LEFT wird aktiviert.");
-        hmi.selectZone(ZoneID.FRONT_LEFT, true);
+        try (ConsoleCapture cc = new ConsoleCapture()) {
+            SafetyManager.getInstance().unlockInput();
 
-        System.out.println("Aktion: hmi.increasePower(FRONT_LEFT)");
-        hmi.increasePower(ZoneID.FRONT_LEFT);
+            hmi.selectZone(ZoneID.FRONT_LEFT, true);
+            hmi.increasePower(ZoneID.FRONT_LEFT);
 
-        System.out.println("Erwartete Wirkung: Leistungsstufe der Zone wird erhöht und über HMI angezeigt.");
-        System.out.println("Tatsächliche Wirkung: siehe HMI-Ausgaben oben.");
+            String txt = cc.text();
+            // orientiert an deiner Ausgabe: "[HMI] Zone FRONT_LEFT -> Leistungsstufe 1"
+            assertContains(ID, txt, "Leistungsstufe 1",
+                    "Leistungsstufe wurde auf 1 erhöht (HMI-Ausgabe)",
+                    "Keine HMI-Ausgabe für Leistungsstufe 1 gefunden");
+        }
     }
 
     // IT-03 – CooktopController ↔ SafetyManager (Kindersicherung blockiert)
     private static void runIT03_CooktopController_SafetyManager() {
-        System.out.println("\n--- IT-03: CooktopController ↔ SafetyManager – Kindersicherung blockiert ---");
+        final String ID = "IT-03";
 
         HmiOutput out = new HmiOutput();
         CooktopController ctl = new CooktopController(out);
         HmiInput hmi = new HmiInput(ctl);
 
-        System.out.println("Vorbedingung: Zone FRONT_LEFT wird aktiviert, Kindersicherung ist AUS.");
-        hmi.selectZone(ZoneID.FRONT_LEFT, true);
+        try (ConsoleCapture cc = new ConsoleCapture()) {
+            SafetyManager.getInstance().unlockInput();
 
-        System.out.println("Aktion 1: hmi.toggleChildLock()  (Kindersicherung EIN)");
-        hmi.toggleChildLock();
+            hmi.selectZone(ZoneID.FRONT_LEFT, true);
+            hmi.toggleChildLock(); // EIN
+            hmi.increasePower(ZoneID.FRONT_LEFT); // soll blockiert werden
 
-        System.out.println("Aktion 2: hmi.increasePower(FRONT_LEFT)  (soll BLOCKIERT werden)");
-        hmi.increasePower(ZoneID.FRONT_LEFT);
+            String txt = cc.text();
 
-        System.out.println("Erwartete Wirkung:");
-        System.out.println(" - SafetyManager meldet isLocked() = true");
-        System.out.println(" - HMI zeigt Fehlermeldung / keine Erhöhung der Stufe");
-        System.out.println("Tatsächliche Wirkung: siehe HMI-Ausgaben oben.");
+            assertTrue(ID, SafetyManager.getInstance().isLocked(),
+                    "SafetyManager ist gesperrt (isLocked()==true)",
+                    "SafetyManager ist NICHT gesperrt");
+
+            // orientiert an deiner Ausgabe: "[HMI] FEHLER: Bedienung gesperrt"
+            assertContains(ID, txt, "Bedienung gesperrt",
+                    "Fehlermeldung bei gesperrter Bedienung erscheint",
+                    "Fehlermeldung 'Bedienung gesperrt' fehlt");
+        } finally {
+            SafetyManager.getInstance().unlockInput();
+        }
     }
 }
