@@ -79,8 +79,6 @@ Diese Komponenten bilden die Grundlage für die objektorientierte Modellierung i
 
 ---
 
----
-
 ## 4. Objektorientiertes Design
 
 Auf Basis der zuvor definierten Architektur wurde das System in **Software-Design-Komponenten**
