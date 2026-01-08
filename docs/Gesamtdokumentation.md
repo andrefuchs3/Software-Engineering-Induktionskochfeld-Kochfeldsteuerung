@@ -6,6 +6,91 @@ Es wird fortlaufend mit jedem Sprint aktualisiert und bildet somit die Hauptrefe
 
 ---
 
+## Hinweise zu verwendeten Hilfsmitteln
+
+Ich versichere, dass ich die Projektarbeit ohne Hilfe Dritter und ohne Benutzung anderer als der angegebenen Quellen und Hilfsmittel angefertigt habe. Die den benutzten Quellen wörtlich oder inhaltlich entnommenen Inhalte sind als solche kenntlich gemacht.
+
+---
+
+### Fachliche Grundlagen
+
+Die fachliche und methodische Grundlage dieses Projekts bilden die Vorlesungsunterlagen zur Veranstaltung **Software Engineering**.  
+Diese vermittelten insbesondere die grundlegenden Konzepte zu:
+
+- Requirements Engineering  
+- Architektur- und Designentwurf  
+- Implementierung  
+- Test und Verifikation  
+- Traceability und iterativer Entwicklung  
+
+Zusätzlich wurde das im Rahmen der Veranstaltung bereitgestellte **Musterbeispiel** herangezogen.  
+Dieses diente als Orientierungshilfe für Struktur, Tiefe und Aufbau der Projektdokumentation sowie für die Einteilung in mehrere Sprints.  
+Das Musterbeispiel wurde **nicht inhaltlich kopiert**, sondern ausschließlich als Referenz für:
+
+- den Aufbau von Sprint-Dokumentationen,  
+- die Formulierung von Testfällen und Retrospektiven,  
+- die konsistente Verknüpfung von Requirements, Design, Implementierung und Tests  
+
+verwendet.
+
+Die Entwicklung der Kochfeldsteuerung erfolgte auf dieser Basis konsequent entlang eines klassischen
+Softwareentwicklungsprozesses mit klarer Trennung der Phasen und iterativer Erweiterung über mehrere Sprints.
+
+---
+
+### Technische Werkzeuge und Dokumentation
+
+Für die Umsetzung des Projekts wurden folgende Werkzeuge eingesetzt:
+
+#### GitHub
+Zur Versionsverwaltung des Quellcodes und zur Nachverfolgung der Entwicklung über mehrere Sprints hinweg.  
+Releases und Baselines wurden genutzt, um stabile Entwicklungsstände
+(z. B. nach Sprint 1, Sprint 2 und Sprint 3) festzuhalten.
+
+#### PlantUML
+Zur modellbasierten Dokumentation der Architektur und des Designs.  
+Es wurden Klassendiagramme, Sequenzdiagramme und Kommunikationsdiagramme erstellt,
+um sowohl die Systemstruktur als auch das Laufzeitverhalten verständlich darzustellen.
+
+#### Java / JDK 17
+Die Implementierung der Kochfeldsteuerung erfolgte in Java unter Verwendung einer aktuellen JDK-Version.  
+Die Projektstruktur wurde bewusst übersichtlich gehalten, um den Fokus auf Architektur,
+Logik und Testbarkeit zu legen.
+
+Die offiziellen Dokumentationen der jeweiligen Werkzeuge wurden zur Klärung technischer Details
+und zur korrekten Nutzung herangezogen.
+
+---
+
+### Nutzung von ChatGPT
+
+ChatGPT wurde während des Projekts **unterstützend** eingesetzt, jedoch ausschließlich auf Basis
+eigener Vorarbeit und unter eigenverantwortlicher Bewertung der Vorschläge.
+
+Die Nutzung umfasste unter anderem:
+
+#### Dokumentation
+- sprachliche Überarbeitung selbst formulierter Texte,  
+- Unterstützung bei Struktur und Verständlichkeit der Sprint-Dokumentation  
+
+#### Implementierung
+- Hilfestellung bei Fehlersuche und Debugging,  
+- Diskussion möglicher Implementierungsansätze,  
+- Unterstützung bei der Strukturierung von Testprogrammen  
+
+#### Architektur und Design
+- Reflexion von Designentscheidungen,  
+- textliche Beschreibung und Überprüfung von UML-Diagrammen  
+
+#### Testplanung
+- Unterstützung bei der Ableitung von Testfällen aus Requirements,  
+- Strukturierung von Modul- und Integrationstests,  
+- Formulierung von Testbeschreibungen und erwarteten Ergebnissen  
+
+Alle durch ChatGPT erzeugten Vorschläge wurden kritisch geprüft, angepasst oder verworfen.  
+
+---
+
 ## 1. Projektüberblick
 
 Ziel des Projekts ist die Entwicklung einer modularen, wartbaren und erweiterbaren Softwarearchitektur für die Steuerung eines Induktionskochfeldes.  
