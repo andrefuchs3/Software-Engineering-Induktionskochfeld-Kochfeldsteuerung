@@ -10,8 +10,6 @@ Es wird fortlaufend mit jedem Sprint aktualisiert und bildet somit die Hauptrefe
 
 Ich versichere, dass ich die Projektarbeit ohne Hilfe Dritter und ohne Benutzung anderer als der angegebenen Quellen und Hilfsmittel angefertigt habe. Die den benutzten Quellen wörtlich oder inhaltlich entnommenen Inhalte sind als solche kenntlich gemacht.
 
----
-
 ### Fachliche Grundlagen
 
 Die fachliche und methodische Grundlage dieses Projekts bilden die Vorlesungsunterlagen zur Veranstaltung **Software Engineering**.  
