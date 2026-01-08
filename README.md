@@ -5,13 +5,9 @@ von Andre Fuchs (Matrikelnummer: 22108306)
 
 unter Leitung durch Prof. Dr. Karsten Becker, TH Deggendorf
 
-### Repository:
+### Repository: [Github Repository](https://github.com/andrefuchs3/Software-Engineering-Induktionskochfeld-Kochfeldsteuerung)
 
-[Github Repository](https://github.com/andrefuchs3/Software-Engineering-Induktionskochfeld-Kochfeldsteuerung)
-
-### Traceability-Matrix:
-
-[Traceability-Matrix](https://github.com/andrefuchs3/Software-Engineering-Induktionskochfeld-Kochfeldsteuerung/blob/main/docs/Traceability-Matrix.md)
+### Traceability-Matrix: [Traceability-Matrix](https://github.com/andrefuchs3/Software-Engineering-Induktionskochfeld-Kochfeldsteuerung/blob/main/docs/Traceability-Matrix.md)
 
 ### Teilfunktionalitäten:
 
@@ -25,11 +21,7 @@ unter Leitung durch Prof. Dr. Karsten Becker, TH Deggendorf
 
 5. Sicherheits- und Sperrfunktionen
 
-### Gesamtdokumentation:
-
-[Gesamtdokumentation](https://github.com/andrefuchs3/Software-Engineering-Induktionskochfeld-Kochfeldsteuerung/blob/main/docs/Gesamtdokumentation.md)
-
-
+### Gesamtdokumentation: [Gesamtdokumentation](https://github.com/andrefuchs3/Software-Engineering-Induktionskochfeld-Kochfeldsteuerung/blob/main/docs/Gesamtdokumentation.md)
 
 ### Erklärung:
 
