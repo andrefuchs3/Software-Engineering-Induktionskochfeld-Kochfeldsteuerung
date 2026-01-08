@@ -38,4 +38,6 @@ Ich erteile hiermit der TH Deggendorf das Recht, die von mir erstellte Software 
 
 Ort, Datum: Deggendorf, 08.01.2026
 
-Unterschrift: Andre Fuchs
+Unterschrift:
+
+![Unterschrift](docs/referenziert/Unterschrift.png)
