@@ -38,4 +38,8 @@ Ich erteile hiermit der TH Deggendorf das Recht, die von mir erstellte Software 
 
 Ort, Datum: Deggendorf, 08.01.2026
 
+Name: Andre Fuchs
+Matrikelnummer: 22108306
+
+
 Unterschrift: Andre Fuchs
